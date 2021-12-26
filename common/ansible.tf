@@ -23,7 +23,13 @@ resource "null_resource" "run_ansible" {
     command = <<-EOT
 export ANSIBLE_HOST_KEY_CHECKING=False;
 ansible-playbook ${path.module}/ansible/playbook.yaml -i ${path.module}/ansible/hosts \
--e "remote_user=${var.remote_user} pass='${local.vars_for_ansible["basic_auth_password"]}' smtp_smarthost='${local.vars_for_ansible["smtp_smarthost"]}' smtp_auth_username='${local.vars_for_ansible["smtp_auth_username"]}' smtp_auth_password='${local.vars_for_ansible["smtp_auth_password"]}' main_receiver_email='${local.vars_for_ansible["main_receiver_email"]}' urgent_receiver_email='${local.vars_for_ansible["urgent_receiver_email"]}'"
+-e remote_user=${var.remote_user} \
+-e pass='${local.vars_for_ansible["basic_auth_password"]}' \
+-e smtp_smarthost='${local.vars_for_ansible["smtp_smarthost"]}' \
+-e smtp_auth_username='${local.vars_for_ansible["smtp_auth_username"]}' \
+-e smtp_auth_password='${local.vars_for_ansible["smtp_auth_password"]}' \
+-e main_receiver_email='${local.vars_for_ansible["main_receiver_email"]}' \
+-e urgent_receiver_email='${local.vars_for_ansible["urgent_receiver_email"]}'
     EOT
   }
 }

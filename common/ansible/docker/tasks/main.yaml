@@ -5,7 +5,7 @@
   become: true
 
 - apt_repository:
-    repo: deb https://download.docker.com/linux/debian stretch stable
+    repo: deb https://download.docker.com/linux/debian buster stable
     state: present
   become: true
 
