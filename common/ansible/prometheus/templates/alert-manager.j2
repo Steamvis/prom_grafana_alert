@@ -1,0 +1,22 @@
+global:
+  smtp_smarthost: '{{ smtp_smarthost }}'
+  smtp_from: 'alertmanager@notification.us'
+  smtp_auth_username: '{{ smtp_auth_username }}'
+  smtp_auth_password: '{{ smtp_auth_password }}'
+  smtp_require_tls: true
+route:
+  receiver: main_receiver
+
+  routes:
+  - receiver: 'urgent_receiver'
+    matchers:
+      - severity="Critical"
+
+receivers:
+- name: 'main_receiver'
+  email_configs:
+    - to: '{{ main_receiver_email }}'
+
+- name: 'urgent_receiver'
+  email_configs:
+    - to: '{{ urgent_receiver_email }}'

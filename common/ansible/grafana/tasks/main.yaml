@@ -1,0 +1,9 @@
+---
+- name: Run Grafana Container
+  community.docker.docker_container:
+    name: grafana
+    image: grafana/grafana-oss
+    state: started
+    restart: yes
+    ports:
+      - "3000:3000"

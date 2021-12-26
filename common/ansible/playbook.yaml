@@ -1,0 +1,29 @@
+- name: Wait For Connections And Install Docker
+  hosts: all
+  gather_facts: false
+  remote_user: "{{ remote_user }}"
+  become: true
+  tasks:
+    - wait_for_connection:
+        delay: 30
+        timeout: 30
+      retries: 3
+
+    - name: Install Docker
+      include_role:
+        name: docker
+
+- name: Run Prometheus * Grafana
+  remote_user: "{{ remote_user }}"
+  hosts: monitoring
+  become: true
+  roles:
+    - grafana
+    - prometheus
+
+- name: Run Node Exporter In App Server
+  remote_user: "{{ remote_user }}"
+  hosts: app
+  become: true
+  roles:
+    - node-exporter

@@ -1,0 +1,53 @@
+---
+- name: Create Prometheus Config File
+  ansible.builtin.template:
+    src: templates/prometheus.j2
+    dest: ~/prometheus.yaml
+    mode: '0644'
+
+- name: Create ALerts Config File
+  ansible.builtin.template:
+    src: templates/rules/alerts.j2
+    dest: ~/alerts.yaml
+    mode: '0644'
+
+- name: Create Alertmanager Config File
+  ansible.builtin.template:
+    src: templates/alert-manager.j2
+    dest: ~/alertmanager.yaml
+    mode: '0644'
+
+- name: Create Web Config File
+  ansible.builtin.template:
+    src: templates/web.j2
+    dest: ~/web.yaml
+    mode: '0644'
+
+- name: Run Alertmanager Container
+  community.docker.docker_container:
+    name: alertmanager
+    image: prom/alertmanager
+    state: started
+    restart: yes
+    command: '--config.file=/etc/alertmanager/config.yaml'
+    volumes:
+      - "~/alertmanager.yaml:/etc/alertmanager/config.yaml:ro"
+    ports:
+      - "9093:9093"
+
+- name: Run Prometheus Container
+  community.docker.docker_container:
+    name: prometheus
+    image: prom/prometheus
+    state: started
+    restart: yes
+    command: >
+      --config.file=/etc/prometheus/prometheus.yml
+    links:
+      - "alertmanager:alertmanager"
+    volumes:
+      - "~/prometheus.yaml:/etc/prometheus/prometheus.yml:ro"
+      - "~/web.yaml:/etc/prometheus/web.yaml:ro"
+      - "~/alerts.yaml:/etc/prometheus/rules/alerts.yaml:ro"
+    ports:
+      - "9090:9090"

@@ -1,0 +1,12 @@
+---
+- name: Run Node-Exporter Container
+  community.docker.docker_container:
+    name: node-exporter
+    image: prom/node-exporter
+    state: started
+    network_mode: host
+    pid_mode: host
+    restart: yes
+    volumes:
+      - '/:/host:ro,rslave'
+    command: '--path.rootfs=/host'

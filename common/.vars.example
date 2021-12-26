@@ -1,0 +1,8 @@
+{
+    "basic_auth_password": "BCRYPT_PASS",
+    "smtp_smarthost": "SMPT_ADDRESS",
+    "smtp_auth_username": "",
+    "smtp_auth_password": "",
+    "main_receiver_email": "",
+    "urgent_receiver_email": ""
+}
